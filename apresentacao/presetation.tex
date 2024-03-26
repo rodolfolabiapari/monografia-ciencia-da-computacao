@@ -1,0 +1,126 @@
+\documentclass[xcolor=dvipsnames]{beamer} 
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+%referências das imagens e outras coisas que encontrar a mais
+%colocar os brain storms
+%aqueles letreiro gigantes antes das seções
+%Falar quanto o projeto gastou de le até agora
+%http://professorcesarcosta.com.br/upload/imagens_upload/nac_08_4.o%20Congresso_ISA.pdf
+
+% CAMPOS, Augusto. O que é Linux. BR-Linux. Florianópolis, março de 2006. Disponível em <http://br-linux.org/faq-linux>. Consultado em [data da sua consulta].
+
+%\usetheme{Boadilla}
+%\usetheme{Frankfurt}
+\usetheme{Madrid}
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+\setbeamertemplate{items}[square]
+\setbeamertemplate{caption}[numbered]
+\usecolortheme{beaver}
+\usecolortheme{dolphin}
+
+%todo
+\usepackage{xkeyval}
+\usepackage{todonotes}
+\presetkeys{todonotes}{inline}{}
+
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{float}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{float}     % para forçar a localizaçao das figuras (usando H no posicionamento, =Here)
+\usepackage{subfigure}
+\usepackage{mathtools} % setas com texto
+\usepackage{multicol}
+\usepackage{listings}
+
+\usepackage{scalefnt}
+\usepackage{ragged2e}
+\usepackage{etoolbox, verbatim}
+
+
+\setcounter{tocdepth}{2}
+
+\lstset{
+	numbers=left,
+	stepnumber=1,
+	numbersep=5pt,
+	numberstyle=\small\color{black},
+	basicstyle= \scriptsize,
+%	keywordstyle=\color{black},
+%	commentstyle=\color{black},
+%	stringstyle=\color{black},
+	tabsize=2
+}
+
+\let\olditem=\item% 
+\renewcommand{\item}{\olditem \justifying}%
+
+%\usetheme{Antibes}
+%\usetheme{Berlin}
+
+\title[Linux \textit{Driver} \textit{Driver} e FPGA]{Implementação de um \textit{Device} \textit{Driver} para Controle de \textit{Hardware} Reconfigurável}
+\author[Guimarães, R.L.M.]{\textbf{Orientado:} Rodolfo Labiapari Mansur Guimarães, \\ \textbf{Orientador:} Otávio de Souza Martins Gomes, \\ \textbf{Coorientador:} Diego Mello da Silva.}
+\institute[IFMG]{\begin{figure}
+			\centering
+			\includegraphics[width=0.4\textwidth]{img/logo.jpg}
+		\end{figure}}
+%\institute[IFMG]{Instituto Federal de Educação, Ciência e Tecnologia de Minas Gerais - Campus Formiga}
+\date[\today]{Apresentação dia \today}
+
+\begin{document}
+
+
+\frame{\titlepage}
+
+\AtBeginSection[] 
+{
+	\begin{frame}
+	\frametitle{Sumário}
+	\tableofcontents[]
+	\end{frame}
+}
+
+\AtBeginSubsection[] 
+{
+	\begin{frame}
+	\frametitle{Sumário}
+	\tableofcontents[
+    currentsection, 
+    currentsubsection, 
+    hideothersubsections, 
+    %sectionstyle=show/hiden, 
+    subsectionstyle=show/shaded, ]
+	\end{frame}
+}
+
+\include{objetivoJustificativa}
+
+\include{metodologia}
+
+\include{referencialTeorico}
+
+\include{desenvolvimento}
+
+\include{conclusao}
+
+\begin{frame}[allowframebreaks]
+        \frametitle{Referências}
+		\bibliographystyle{abnt}
+        \bibliography{referencias.bib}
+\end{frame}
+
+\frame{\titlepage}
+
+\include{cagaco}
+
+\frame{\titlepage}
+\end{document}

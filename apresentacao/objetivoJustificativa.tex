@@ -1,0 +1,58 @@
+
+\section{Objetivo}
+%\begin{frame}{}
+%	\centering \Huge \color{blue} \textbf{Objetivos}
+%\end{frame}
+	\begin{frame}{Objetivos}
+		\begin{block}{Objetivo Geral}
+			\begin{itemize}
+				\item \textbf{Pesquisa} e \textbf{Desenvolvimento} de um \textbf{\textit{Driver} em plataforma GNU/Linux} para tornar possível a \textbf{comunicação com um dispositivo externo} ao computador:
+				\begin{itemize}
+					\item  No qual executa um algoritmo de criptografia simétrica.
+				\end{itemize}
+			\end{itemize}
+		\end{block}
+		\bigskip
+		\begin{block}{Objetivo Específico}
+			\begin{itemize}
+				%\item Tornar possível a conexão de um \textit{algoritmo de criptografia simétrico desenvolvido em \textit{hardware}} \textbf{com} o \textit{espaço de usuário} por meio de um \textit{Driver} no Kernel Linunx.
+				\item Comunicar por meio do protocolo \textbf{USB}.
+				\item Componentes de \textbf{código-fonte aberto} junto com \textbf{\textit{hardware} reconfigurável}.
+				\item Descrever uma metodologia para o entendimento e desenvolvimento de um \textit{Driver}.
+			\end{itemize}
+		\end{block}
+	\end{frame}
+
+	%Porque estudar este problema
+\section{Justificativa}
+%\begin{frame}{}
+%	\centering \Huge \color{blue} \textbf{Justificativas}
+%\end{frame}
+	\begin{frame}{Justificativas}
+		%\begin{block}{Objetivo}
+			%\item Construir um `sistema' de componentes onde seja possível conectar um dispositivo USB Serial ao espaço do usuário.
+			%Construir um \textbf{\it sistema de componentes} onde seja possível conectar um \textit{hardware} reconfigurável ao espaço de usuário utilizando um \textit{Driver} USB Serial.
+		%\end{block}
+		%\bigskip
+		\begin{enumerate}
+			\setlength\itemsep{1.5em}
+			\item Algoritmos desenvolvido em \textit{hardware} \textbf{necessitam} de uma interface de controle para a comunicação com o usuário.
+			%\item Abrangência sobre conhecimento em sistemas operacionais no âmbito:
+			%\begin{itemize}
+			%	\setlength\itemsep{1em}
+			%	\item \textit{Driver} \textit{Driver} dentro de um sistema operacional Linux;
+			%	\item Comunicação através de protocolo USB.
+			%\end{itemize} 
+			%\todo{Porque \textit{Drivers} são genéricos e complexos}
+			\item Os \textit{Drivers} atuais são genéricos \cite{corbet2005linux}:
+			\begin{itemize}
+				\item Tornando suficientemente para serem extremamente complexos.
+			\end{itemize}
+			\item Documentação sobre desenvolvimento de um \textit{Driver}.
+			%\todo{Citar trabalhos relacionados e falar o que o seu é diferente}
+			%\todo{Colocar mais coisas}
+			%\item - já existe algo feito?
+			%\item - porque utilizar o tty ao invés do blocos
+				% Creio que no livro ldd deve ter uma explicação pra isso
+		\end{enumerate}
+	\end{frame}

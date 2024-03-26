@@ -1,0 +1,222 @@
+
+\section*{Extra}
+
+	\begin{frame}{Projetos Futuros}
+		\begin{itemize}
+			\item Alterar o funcionamento da comunicação USB para que tenha uma via só para envio de controle e outra só para envio de dados\footnote{Se possível}.
+			\item Adicionando o protocolo USB no FPGA:
+			\begin{itemize}
+				\item Mensagens de informações ao usuário deverão ser trabalhadas no próprio \textit{Driver} eliminando o dispositivo intermediário\footnote{Hipótese.}; ou
+				\item Criação de um \textit{software} a nível de usuário para todo o controle do \textit{hardware}.
+			\end{itemize}  
+		\end{itemize}
+	\end{frame}
+
+
+
+
+		\begin{frame}{FPGA -  Implementações}
+			\begin{enumerate}
+				\item Algoritmo 3DES de criptografia simétrico desenvolvido em hardware onde:
+				\begin{itemize}
+					\item 3 chaves de 64 bits (o mesmo que 8 caracteres ASCII de 8 bits);
+					\item Texto formado em blocos de 64 bits completos.
+				\end{itemize}
+				\item Algoritmos de envio e recebimento de dados através de UART.
+				\begin{itemize}
+  					\setlength\itemsep{.8em}
+					\item $Clock_{FPGA} = 50.000.000 \quad\quad Clock_{requerido} = 9.600 $
+					\item Cada intervalo teria: $\frac{50.000.000}{9.600} = 5.208,33333~$ clocks do $Clock_{FPGA}$
+					\item Ou seja, a cada $ 5.208,33333~$ pulso de clock de $50Mhz$, deve pular 1 do $ NovoClock_{FPGA} $.
+					%\item Entretanto, é um número \textit{fracionário} criando uma margem de erro que \textit{pode ser} notável assintoticamente.
+					\item Erro: $\frac{|Clk_{Experi} - Clk_{Correto}|}{Clk_{Correto}} = \frac{0,333~}{5.208,0} = 0,06400409626\% $
+				\end{itemize}
+				\item Máquina de estados controladora do sistema em hardware.
+			\end{enumerate}
+		\end{frame}
+
+
+		\begin{frame}{Linux - Detalhes importantes do device driver}
+			\begin{itemize}
+				\item Então, o `novo' driver possui:
+				\begin{itemize} 
+					\item Macro de inicialização (\texttt{init(), exit(), probe(), disconnect()});
+					\item Funções de envio de pacotes;
+					\item Funções como \texttt{open()} e \texttt{close()} para a inicialização e términdo da comunicação;
+					\item Uma tabela de devices para possíveis conexões.
+				\end{itemize}
+				\item E deixou de existir:
+				\begin{itemize}
+					\item \texttt{Init()};
+					\item \texttt{Exit()};
+					\item \texttt{Probe()};
+					\item \texttt{Disconnect()}...
+				\end{itemize}
+			\end{itemize}
+		\end{frame}
+
+	\begin{frame}[fragile, allowframebreaks]{Complementar}
+		\begin{comment}
+		\begin{block}{Por que o processamento não fica todo no FPGA?}
+			Por ser um hardware extremamente rápido, este ficará exercendo sua função de forma \textbf{dedicada}. Ou seja, se determinado usuário quiser trocar o algoritmo na FPGA, basta ele colocar o novo algoritmo desde que ele funcione por meio de blocos.
+		\end{block}
+
+		\begin{block}{Por que não desenvolveu um software em espaço de usuário mais bonito ou funcional? Nem sequer falou de espaço do usuário...}
+			O foco do desenvolvimento deste trabalho é justamente a conexão do Kernel ao FPGA. Qualquer software em nível de usuário será tido como trabalho extra.
+		\end{block}
+
+		\begin{block}{Poderia ter feito num FPGA com tamanho menor?}
+			Sim. Tentou-se desenvolver os algoritmos num Ciclone II, entretanto, este só suporta cerca de 4 mil EL. Então utilizou-se o Ciclone IV disponibilizado pelo IFMG - Formiga que possui cerca de 115 mil.
+		\end{block}
+		\end{comment}
+
+		\begin{block}{Como é o envio de um URB?}
+			\begin{enumerate}
+				\item No driver, associa um específico endpoint a um específico device.
+				\item Envia do driver para o USB Core
+				\item Envia do USB Core para um específico driver Host  Controlardor USB.
+				\item Este driver Host Controlador processa essa informação e envia para o device.
+				\item Quando o envio é completado, o driver Controlador Host notifica o driver do desenvolvedor.
+			\end{enumerate}
+		\end{block}
+
+		\begin{block}{Major e Minor Numbers}
+			\begin{itemize}
+				\item Drivers de Char possuem dois números como parte de suas careacterísticas.
+				\begin{itemize}
+					\item \textbf{Major:} Identifica que o driver está associado com o device.
+					\item \textbf{Minor:}
+				\end{itemize}
+				\item Por exempo o \texttt{/dev/null} e \texttt{/dev/zero}:
+				\begin{itemize}
+					\item Ambos tem o número Major igual;
+					\item Ele é utilizado para associar o driver ao dispositivo;
+					\item Entretanto, possuim o número Minor diferentes.
+					\item É usado pelo quernel para determinar qual device específico ele está referenciando.
+					\item ...
+				\end{itemize}
+			
+			\end{itemize}
+		\end{block}
+
+		\begin{block}{Device}
+			\begin{itemize}
+				\item Endpoints:
+				\begin{itemize}
+				    \item Control, Interrupt, Bulk e Isochronous.
+				\end{itemize}
+				\item Interfaces:
+				\begin{itemize}
+				    \item Mouse, Teclado possuem somente 1 via;
+				    \item Podem ter configurações diferentes;
+				    \item Áudio em Linux, por exemplo teria 2 interfaces (Áudio e Controle).
+				\end{itemize}
+				\item Configurations:
+				\begin{itemize}
+				    \item Em Linux, não é comum utilizar mais que 1 configuração no dispositivo.
+				\end{itemize}
+				\item Ou seja:
+				\begin{enumerate}
+				    \item Devices usually have one or more configurations.
+				    \item Configurations often have one or more interfaces.
+				    \item Interfaces usually have one or more settings.
+				    \item Interfaces have zero or more endpoints.
+				\end{enumerate}
+			\end{itemize}
+		\end{block}
+
+
+		\begin{comment}
+		\begin{block}{Compilação e Execução} 
+			\begin{itemize}
+				\item Deve compilar o código utilizando um compilador fornecido e integrado no Kernel:
+				\begin{itemize}
+					\item
+				\end{itemize}
+				\item Após a compilação...:
+				\begin{itemize}
+					\item
+				\end{itemize}
+			\end{itemize}
+		\end{block}
+		\end{comment}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+	\subsection*{Linguagens de Programação}
+	\begin{frame}[fragile]{Linguagens de Programação - VHDL}
+		\begin{itemize}
+			\item \textit{\textbf{V}HSIC (Very High Speed Integrated Circuits) \textbf{H}ardware \textbf{D}escription \textbf{L}anguage}.
+
+		\begin{lstlisting}[language=VHDL]
+-- importa std_logic da IEEE library
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+-- Declara uma entidade
+entity ANDGATE is
+   port ( 
+         IN1 : in std_logic;
+         IN2 : in std_logic;
+         OUT1: out std_logic);
+end ANDGATE;
+architecture RTL of ANDGATE is
+
+begin
+  OUT1 <= IN1 and IN2;
+end RTL;
+		\end{lstlisting}
+		\end{itemize}
+\end{frame}
+	\begin{frame}[fragile]{Linguagens de Programação - Arduino}
+	\begin{itemize}
+		\item Linguagem Arduino.
+		\begin{lstlisting}[language=C++]
+// the setup function runs once when you press reset or power the board
+void setup() {
+  // initialize digital pin 13 as an output.
+  pinMode(13, OUTPUT);
+}
+
+// the loop function runs over and over again forever
+void loop() {
+  digitalWrite(13, HIGH);  // turn the LED on (HIGH is the voltage level)
+  delay(1000);             // wait for a second
+  digitalWrite(13, LOW);   // turn the LED off by making the voltage LOW
+  delay(1000);             // wait for a second
+}			
+		\end{lstlisting} 
+	\end{itemize}
+\end{frame}
+
+	\begin{frame}[fragile]{Compilação do Driver}
+			\begin{lstlisting}
+obj-m	:= usbSerial.o
+
+KERNELDIR ?= /lib/modules/$(shell uname -r)/build
+PWD       := $(shell pwd)
+
+all:
+	rm -f *.o *~ core .depend .*.cmd *.ko *.mod.c *.symvers *.order     
+	#sudo /usr/sbin/ntpdate ntp.on.br time.nist.gov pool.ntp.org
+
+	# Compilando os arquivos atraves do kernel
+	$(MAKE) -C $(KERNELDIR) M=$(PWD)     
+	
+	# Copiando para a pasta temporaria
+	sudo cp usbSerial.ko /tmp/        
+	
+	sudo rmmod usbSerial             # Removendo o driver antigo
+	
+	sudo insmod /tmp/usbSerial.ko    # Adicionando o novo driver
+			\end{lstlisting}
+\end{frame}
+
